@@ -29,6 +29,7 @@ require(
 	require,
 	Physics
 ){
+	'use strict';
 	// display start game message
 	document.body.className = 'before-game';
 	var inGame = false;
@@ -131,9 +132,8 @@ require(
 
 		// blow up anything that touches a laser pulse
 		world.subscribe('collisions:detected', function( data ){
-			var collisions = data.collisions
-				,col
-				;
+			var collisions = data.collisions,
+				col;
 
 			for ( var i = 0, l = collisions.length; i < l; ++i ){
 				col = collisions[ i ];
@@ -168,7 +168,7 @@ require(
 			renderer.drawCircle(x, y, r * 2 / 3, { strokeStyle: '#090' });
 			renderer.drawCircle(x, y, r / 3, { strokeStyle: '#090' });
 
-			for (var i = 0, l = data.bodies.length, b = data.bodies[ i ]; b = data.bodies[ i ]; i++){
+			for (var i = 0, b = data.bodies[ i ]; b = data.bodies[ i ]; i++){
 
 				// get the displacement of the body from the ship and scale it
 				d.clone( ship.state.pos ).vsub( b.state.pos ).mult( -0.05 );
