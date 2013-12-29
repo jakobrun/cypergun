@@ -59,6 +59,11 @@ define(['require', 'physicsjs', 'physicsjs/bodies/circle'], function(require, Ph
 					topic: 'blow-up',
 					body: self
 				});
+
+				var audio = document.getElementById('explosion');
+				audio.currentTime = 0;
+				audio.play();
+
 				return self;
 			}
 		};

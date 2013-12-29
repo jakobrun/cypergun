@@ -128,6 +128,9 @@ define(
 						laser = undefined;
 					}, 600);
 					world.add( laser );
+					var laserAudio = document.getElementById('laser');
+					laserAudio.currentTime = 0;
+					laserAudio.play();
 					return self;
 				},
 				// 'splode! This will remove the ship
