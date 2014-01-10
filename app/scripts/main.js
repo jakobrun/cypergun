@@ -53,9 +53,9 @@ require(
 		// debug:true,
 		styles: {
 			'circle': {
-				strokeStyle: 'rgb(0, 30, 0)',
+				strokeStyle: 'rgb(30, 0, 0)',
 				lineWidth: 1,
-				fillStyle: 'rgb(100, 200, 50)',
+				fillStyle: 'rgb(200, 100, 50)',
 				angleIndicator: false
 			},
 			'convex-polygon' : {
@@ -139,10 +139,12 @@ require(
 				col = collisions[ i ];
 
 				if ( col.bodyA.gameType === 'laser' || col.bodyB.gameType === 'laser' ){
-					if ( col.bodyA.blowUp ){
+					if ( col.bodyA !== ship && col.bodyA.blowUp ){
 						col.bodyA.blowUp();
-					} else if ( col.bodyB.blowUp ){
+						world.removeBody(col.bodyB);
+					} else if ( col.bodyB !== ship &&  col.bodyB.blowUp ){
 						col.bodyB.blowUp();
+						world.removeBody(col.bodyA);
 					}
 					return;
 				}

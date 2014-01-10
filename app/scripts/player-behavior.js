@@ -2,7 +2,7 @@
 define(['physicsjs'], function(Physics){
 	'use strict';
 	Physics.behavior('player-behavior', function( parent ){
-
+		var lif = 3;
 		return {
 			init: function( options ){
 				var self = this;
@@ -19,7 +19,7 @@ define(['physicsjs'], function(Physics){
 					}
 					switch ( e.keyCode ){
 					case 38: // up
-						self.movePlayer();
+						self.movePlayer(true);
 						break;
 					case 40: // down
 						break;
@@ -31,6 +31,15 @@ define(['physicsjs'], function(Physics){
 						break;
 					case 90: // z
 						player.shoot();
+						break;
+					case 49: // 1
+						player.useGun1();
+						break;
+					case 50: // 2
+						player.useGun2();
+						break;
+					case 51: // 3
+						player.useGun3();
 						break;
 					}
 					return false;
@@ -92,8 +101,15 @@ define(['physicsjs'], function(Physics){
 					// and one of these bodies is the player...
 					if ( col.bodyA.gameType !== 'debris' &&
 						col.bodyB.gameType !== 'debris' &&
+						col.bodyA.gameType !== 'laser' &&
+						col.bodyB.gameType !== 'laser' &&
 						(col.bodyA === player || col.bodyB === player)
 					){
+						if(lif>0) {
+							lif = lif-1;
+							return;
+						}
+
 						player.blowUp();
 						world.removeBehavior( this );
 						this.gameover = true;
@@ -108,12 +124,7 @@ define(['physicsjs'], function(Physics){
 
 			// toggle player motion
 			movePlayer: function( active ){
-
-				if ( active === false ){
-					this.playerMove = false;
-					return;
-				}
-				this.playerMove = true;
+				this.playerMove = active;
 			},
 
 			behave: function( data ){

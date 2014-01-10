@@ -3,14 +3,19 @@ define(
 	[
 		'require',
 		'physicsjs',
+		'scripts/regular-gun',
+		'scripts/shotgun',
 		'physicsjs/bodies/circle',
 		'physicsjs/bodies/convex-polygon'
 	],
 	function(
 		require,
-		Physics
+		Physics,
+		gun,
+		shotgun
 	){
 		'use strict';
+		var currentGun = gun;
 		// extend the circle body
 		Physics.body('player', 'circle', function( parent ){
 
@@ -75,10 +80,15 @@ define(
 					if (!world){
 						return self;
 					}
+					//max speed
+					var speed = Math.pow(this.state.vel.get(0), 2) + Math.pow(this.state.vel.get(1), 2);
+					if(speed>0.01){
+						return self;
+					}
 					var angle = this.state.angular.pos;
 					var scratch = Physics.scratchpad();
 					// scale the amount to something not so crazy
-					amount *= 0.00001;
+					amount *= 0.0001;
 					// point the acceleration in the direction of the ship's nose
 					var v = scratch.vector().set(
 						amount * Math.cos( angle ),
@@ -96,42 +106,19 @@ define(
 					}
 					return self;
 				},
+				useGun1: function () {
+					currentGun = gun;
+				},
+				useGun2: function () {
+					currentGun = shotgun;
+				},
+				useGun3: function () {
+				},
 				// this will create a projectile (little circle)
 				// that travels away from the ship's front.
 				// It will get removed after a timeout
 				shoot: function(){
-					var self = this;
-					var world = this._world;
-					if (!world){
-						return self;
-					}
-					var angle = this.state.angular.pos;
-					var cos = Math.cos( angle );
-					var sin = Math.sin( angle );
-					var r = this.geometry.radius + 5;
-					// create a little circle at the nose of the ship
-					// that is traveling at a velocity of 0.5 in the nose direction
-					// relative to the ship's current velocity
-					var laser = Physics.body('circle', {
-						x: this.state.pos.get(0) + r * cos,
-						y: this.state.pos.get(1) + r * sin,
-						vx: (0.5 + this.state.vel.get(0)) * cos,
-						vy: (0.5 + this.state.vel.get(1)) * sin,
-						radius: 2
-					});
-					// set a custom property for collision purposes
-					laser.gameType = 'laser';
-
-					// remove the laser pulse in 600ms
-					setTimeout(function(){
-						world.removeBody( laser );
-						laser = undefined;
-					}, 600);
-					world.add( laser );
-					var laserAudio = document.getElementById('laser');
-					laserAudio.currentTime = 0;
-					laserAudio.play();
-					return self;
+					return currentGun(this);
 				},
 				// 'splode! This will remove the ship
 				// and replace it with a bunch of random

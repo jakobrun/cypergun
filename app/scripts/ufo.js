@@ -20,7 +20,7 @@ define(['require', 'physicsjs', 'physicsjs/bodies/circle'], function(require, Ph
 				var scratch = Physics.scratchpad();
 				var rnd = scratch.vector();
 				var pos = this.state.pos;
-				var n = 40;
+				var n = 100;
 				var r = 2 * this.geometry.radius;
 				var size = r / n;
 				var mass = 0.001;
