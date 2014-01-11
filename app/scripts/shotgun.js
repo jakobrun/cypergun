@@ -43,8 +43,8 @@ define(
                 world.add(laser);
             }
             shoot(cos, sin);
-            //shoot(Math.cos(angle + 0.2), Math.sin(angle + 0.2));
-            //shoot(Math.cos(angle - 0.2), Math.sin(angle - 0.2));
+            shoot(Math.cos(angle + 0.2), Math.sin(angle + 0.2));
+            shoot(Math.cos(angle - 0.2), Math.sin(angle - 0.2));
 
             var audio = document.getElementById('shotgun');
             audio.currentTime = 0;
