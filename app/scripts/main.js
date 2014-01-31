@@ -33,12 +33,16 @@ require({
     var inGame = false;
     document.addEventListener('keydown', function(e) {
 
-        console.log('start');
-        // if user presses spacebar inbetween games, we'll load a new game
+        console.log('start', e.keyCode);
+        // if user presses z inbetween games, we'll load a new game
         if (!inGame && e.keyCode === 90) {
             document.body.className = 'in-game';
             inGame = true;
             newGame();
+        } else if (inGame && e.keyCode === 32) {
+            quit();
+            inGame = false;
+            document.body.className = 'before-game';
         }
     });
 
@@ -226,6 +230,12 @@ require({
             document.body.className = 'win-game';
             inGame = false;
         });
+    };
+    var quit = function() {
+        if (world) {
+            world.destroy();
+            world = undefined;
+        }
     };
 
     // subscribe to ticker and start looping
